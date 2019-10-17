@@ -15,11 +15,11 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 
-import Permissions from 'react-native-permissions';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { RNCamera as Camera } from 'react-native-camera';
 
 const PERMISSION_AUTHORIZED = 'authorized';
-const CAMERA_PERMISSION = 'camera';
+const CAMERA_PERMISSION = Platform.OS === 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
 const CAMERA_FLASH_MODE = Camera.Constants.FlashMode;
 const CAMERA_FLASH_MODES = [
   CAMERA_FLASH_MODE.torch, CAMERA_FLASH_MODE.on, CAMERA_FLASH_MODE.off,
@@ -120,26 +120,12 @@ export default class QRCodeScanner extends Component {
 
   componentDidMount() {
     if (Platform.OS === 'ios') {
-      Permissions.request(CAMERA_PERMISSION).then(response => {
+      request(CAMERA_PERMISSION).then(response => {
         this.setState({
-          isAuthorized: response === PERMISSION_AUTHORIZED,
+          isAuthorized: response === RESULTS.GRANTED,
           isAuthorizationChecked: true,
         });
       });
-    } else if (
-      Platform.OS === 'android' &&
-      this.props.checkAndroid6Permissions
-    ) {
-      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA, {
-        title: this.props.permissionDialogTitle,
-        message: this.props.permissionDialogMessage,
-      }).then(granted => {
-        const isAuthorized = granted === PermissionsAndroid.RESULTS.GRANTED;
-
-        this.setState({ isAuthorized, isAuthorizationChecked: true });
-      });
-    } else {
-      this.setState({ isAuthorized: true, isAuthorizationChecked: true });
     }
     
     if (this.props.fadeIn) {
