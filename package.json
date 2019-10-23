@@ -70,7 +70,7 @@
   "main": "index.js",
   "name": "react-native-qrcode-scanner",
   "peerDependencies": {
-    "react-native-camera": "^3.7.2"
+    "react-native-camera": "^3.8.0"
   },
   "repository": {
     "type": "git",
