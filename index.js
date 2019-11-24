@@ -119,14 +119,12 @@ export default class QRCodeScanner extends Component {
   }
 
   componentDidMount() {
-    if (Platform.OS === 'ios') {
-      request(CAMERA_PERMISSION).then(response => {
-        this.setState({
-          isAuthorized: response === RESULTS.GRANTED,
-          isAuthorizationChecked: true,
-        });
+    request(CAMERA_PERMISSION).then(response => {
+      this.setState({
+        isAuthorized: response === RESULTS.GRANTED,
+        isAuthorizationChecked: true,
       });
-    }
+    });
     
     if (this.props.fadeIn) {
       Animated.sequence([
